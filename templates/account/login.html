@@ -1,0 +1,34 @@
+{% extends "account/base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+{% block title %}<title>Ecommerce|Login </title>{% endblock %}
+
+{% block content %}
+<h4 class="card-title">Login</h4>
+<form method="POST" action="{% url 'account_login' %}" class="my-login-validation" novalidate="">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="form-group">
+    <a href="{% url 'account_reset_password' %}">Forgot password ?</a>
+    </div>
+    <div class="form-group m-0">
+        <button type="submit" class="btn btn-primary btn-block">
+            Login
+        </button>
+    </div>
+
+    <div class="mt-4 text-center">
+        Don't have an account? <a href="{% url 'account_signup' %}">Create One</a>
+    </div>
+</form>
+    {% load account socialaccount %}
+
+    {% get_providers as socialaccount_providers %}
+    <ul class="social_providers_list">
+    {% for provider in socialaccount_providers %}
+        <a title="{{provider.name}}" class="btn btn-outline-dark"
+         href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}"><i class="fa fa-{{provider.name}}" id="social_icon"></i>{{provider.name}}</a>
+    {% endfor %}
+    </ul>
+{% endblock %}
